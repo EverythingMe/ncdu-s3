@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ncdu-s3',
-    version='0.1',
+    version='0.2',
     description='Generate ncdu data files for S3 buckets',
     author='EverythingMe',
     author_email='omrib@everything.me',
