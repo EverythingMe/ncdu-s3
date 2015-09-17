@@ -1,10 +1,10 @@
 from __future__ import absolute_import
 
 import urlparse
-
+import boto3
 
 class S3DirectoryGenerator(object):
-    def __init__(self, s3_connection, s3_url):
+    def __init__(self, s3_url):
         parsed_s3_url = urlparse.urlparse(s3_url)
         if parsed_s3_url.scheme != 's3':
             raise SyntaxError('Invalid S3 scheme')
@@ -13,6 +13,13 @@ class S3DirectoryGenerator(object):
         self.bucket_path = parsed_s3_url.path[1:] if parsed_s3_url.path.startswith('/') else parsed_s3_url.path
         bucket_path_split = self.bucket_path.split('/')
 
+        try:
+            client = boto3.client('s3')
+            region = client.get_bucket_location(Bucket=self.bucket_name)['LocationConstraint']
+        except:
+            region=None
+
+        s3_connection = boto3.resource('s3', region_name=region)
         self.bucket = s3_connection.Bucket(self.bucket_name)
 
         if bucket_path_split[-1] == '':
