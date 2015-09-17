@@ -1,5 +1,4 @@
 from __future__ import absolute_import
-import boto3
 import click
 import itertools
 import urlparse
@@ -14,7 +13,7 @@ def main(ctx, s3_url, output):
     assert isinstance(ctx, click.Context)
 
     try:
-        s3_directory_generator = S3DirectoryGenerator(boto3.resource('s3'), s3_url)
+        s3_directory_generator = S3DirectoryGenerator(s3_url)
     except SyntaxError, e:
         ctx.fail(e.message)
         return
